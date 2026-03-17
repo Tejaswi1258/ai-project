@@ -3,36 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotion Analyzer AI</title>
+    <title>Emotional AI Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>🤖 Emotion Analyzer AI</h1>
-        <p class="subtitle">Analyze emotions: Happy, Sad, Angry, Anxious, Excited & more</p>
-        
-        <div class="input-section">
-            <textarea id="textInput" placeholder="Type or paste your text here..."></textarea>
-            <button id="analyzeBtn" onclick="analyzeEmotion()">Analyze Emotion</button>
-        </div>
-        
-        <div id="alertBox" class="alert-box hidden"></div>
-        <div id="result" class="result hidden">
-            <div class="emotion-display">
-                <span id="emotionIcon" class="emotion-icon"></span>
-                <h2 id="emotionText"></h2>
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo">🧠</span>
+                <h2>EmoAI</h2>
             </div>
-            <div class="confidence">
-                <p>Confidence: <span id="confidenceText"></span></p>
-                <div class="progress-bar">
-                    <div id="progressFill" class="progress-fill"></div>
+            <p class="sidebar-sub">Your emotional AI companion</p>
+            <div class="emotion-history" id="emotionHistory">
+                <p class="history-label">Emotion History</p>
+            </div>
+            <button class="clear-btn" onclick="clearChat()">🗑 Clear Chat</button>
+        </div>
+
+        <div class="main">
+            <div class="chat-header">
+                <div class="status-dot"></div>
+                <span>EmoAI is here for you</span>
+                <div id="currentEmotion" class="current-emotion"></div>
+            </div>
+
+            <div class="chat-window" id="chatWindow">
+                <div class="message ai-message">
+                    <span class="avatar">🧠</span>
+                    <div class="bubble">
+                        Hey there! I'm EmoAI — I'm here to listen and understand how you're really feeling. What's on your mind today?
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div id="loading" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Analyzing emotion...</p>
+
+            <div id="alertBanner" class="alert-banner hidden"></div>
+
+            <div class="input-area">
+                <textarea id="userInput" placeholder="Tell me how you're feeling..." rows="1" oninput="autoResize(this)"></textarea>
+                <button id="sendBtn" onclick="sendMessage()">➤</button>
+            </div>
         </div>
     </div>
 
