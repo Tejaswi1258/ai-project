@@ -6,14 +6,11 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from emotion_analyzer import EmotionAnalyzer
 
-app = Flask(__name__, template_folder='../src/templates', static_folder='../src/static')
-analyzer = None
+app = Flask(__name__, 
+            template_folder=os.path.join(os.path.dirname(__file__), '..', 'src', 'templates'),
+            static_folder=os.path.join(os.path.dirname(__file__), '..', 'src', 'static'))
 
-def get_analyzer():
-    global analyzer
-    if analyzer is None:
-        analyzer = EmotionAnalyzer()
-    return analyzer
+analyzer = EmotionAnalyzer()
 
 @app.route('/')
 def home():
@@ -23,12 +20,7 @@ def home():
 def analyze():
     data = request.json
     text = data.get('text', '')
-    
     if not text:
         return jsonify({'error': 'No text provided'}), 400
-    
-    result = get_analyzer().analyze(text)
+    result = analyzer.analyze(text)
     return jsonify(result)
-
-if __name__ == '__main__':
-    app.run(debug=True)

@@ -1,8 +1,11 @@
-from transformers import pipeline
+import urllib.request
+import json
+import os
 
 class EmotionAnalyzer:
     def __init__(self):
-        self.classifier = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base")
+        self.api_url = "https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base"
+        self.api_token = os.environ.get("HF_API_TOKEN", "")
         self.emotion_map = {
             'joy': 'Happy',
             'sadness': 'Sad',
@@ -12,14 +15,21 @@ class EmotionAnalyzer:
             'disgust': 'Disgusted',
             'neutral': 'Neutral'
         }
-    
+
     def analyze(self, text):
-        result = self.classifier(text)[0]
-        emotion = result['label']
-        mapped_emotion = self.emotion_map.get(emotion, emotion)
-        
+        payload = json.dumps({"inputs": text}).encode("utf-8")
+        headers = {
+            "Authorization": f"Bearer {self.api_token}",
+            "Content-Type": "application/json"
+        }
+
+        req = urllib.request.Request(self.api_url, data=payload, headers=headers)
+        with urllib.request.urlopen(req) as response:
+            result = json.loads(response.read().decode())[0]
+
+        top = max(result, key=lambda x: x['score'])
         return {
-            "emotion": mapped_emotion,
-            "confidence": round(result["score"] * 100, 2),
-            "original_label": emotion
+            "emotion": self.emotion_map.get(top['label'], top['label']),
+            "confidence": round(top['score'] * 100, 2),
+            "original_label": top['label']
         }
