@@ -52,6 +52,14 @@ function displayResult(data) {
     document.getElementById('emotionText').className = `emotion-${emotion}`;
     document.getElementById('confidenceText').textContent = `${confidence}%`;
     document.getElementById('progressFill').style.width = `${confidence}%`;
+
+    const alertBox = document.getElementById('alertBox');
+    if (data.alert) {
+        alertBox.textContent = data.alert;
+        alertBox.classList.remove('hidden');
+    } else {
+        alertBox.classList.add('hidden');
+    }
     
     document.getElementById('result').classList.remove('hidden');
 }

@@ -157,4 +157,15 @@ button:active {
 .emotion-Anxious { color: #9370DB; }
 .emotion-Excited { color: #FF6347; }
 .emotion-Disgusted { color: #8B4513; }
-.emotion-Neutral { color: #808080; }
+.alert-box {
+    background: #ff4444;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.emotion-Hopeless { color: #4a0000; }
