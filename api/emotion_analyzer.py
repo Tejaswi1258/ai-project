@@ -1,35 +1,45 @@
-import urllib.request
-import json
-import os
-
 class EmotionAnalyzer:
     def __init__(self):
-        self.api_url = "https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base"
-        self.api_token = os.environ.get("HF_API_TOKEN", "")
-        self.emotion_map = {
-            'joy': 'Happy',
-            'sadness': 'Sad',
-            'anger': 'Angry',
-            'fear': 'Anxious',
-            'surprise': 'Excited',
-            'disgust': 'Disgusted',
-            'neutral': 'Neutral'
+        self.emotion_keywords = {
+            'Happy': ['happy', 'joy', 'great', 'wonderful', 'amazing', 'love', 'excited', 'fantastic',
+                      'good', 'awesome', 'glad', 'pleased', 'delighted', 'cheerful', 'smile', 'laugh',
+                      'blessed', 'grateful', 'thankful', 'enjoy', 'fun', 'best', 'excellent', 'brilliant'],
+            'Sad': ['sad', 'unhappy', 'cry', 'tears', 'depressed', 'miserable', 'heartbroken', 'grief',
+                    'sorrow', 'upset', 'down', 'gloomy', 'hopeless', 'lonely', 'alone', 'miss', 'lost',
+                    'hurt', 'pain', 'broken', 'empty', 'numb', 'regret', 'disappointed', 'failure'],
+            'Angry': ['angry', 'anger', 'furious', 'rage', 'hate', 'mad', 'annoyed', 'frustrated',
+                      'irritated', 'outraged', 'disgusted', 'bitter', 'hostile', 'violent', 'aggressive',
+                      'enraged', 'livid', 'infuriated', 'resentful', 'offended', 'terrible', 'awful'],
+            'Anxious': ['anxious', 'anxiety', 'worried', 'nervous', 'scared', 'fear', 'afraid', 'panic',
+                        'stress', 'stressed', 'tense', 'uneasy', 'dread', 'terror', 'frightened', 'insecure',
+                        'overwhelmed', 'helpless', 'uncertain', 'doubt', 'confused', 'lost', 'trouble'],
+            'Excited': ['excited', 'thrilled', 'ecstatic', 'eager', 'enthusiastic', 'pumped', 'hyped',
+                        'wow', 'incredible', 'unbelievable', 'surprised', 'shocked', 'astonished', 'amazed',
+                        'cant wait', 'looking forward', 'anticipate', 'energetic', 'motivated', 'inspired'],
+            'Lonely': ['lonely', 'alone', 'isolated', 'abandoned', 'forgotten', 'invisible', 'nobody',
+                       'no one', 'empty', 'missing', 'longing', 'yearning', 'disconnected', 'excluded',
+                       'left out', 'unwanted', 'unloved', 'ignored', 'rejected', 'solitude', 'apart']
         }
 
     def analyze(self, text):
-        payload = json.dumps({"inputs": text}).encode("utf-8")
-        headers = {
-            "Authorization": f"Bearer {self.api_token}",
-            "Content-Type": "application/json"
-        }
+        text_lower = text.lower()
+        scores = {}
 
-        req = urllib.request.Request(self.api_url, data=payload, headers=headers)
-        with urllib.request.urlopen(req) as response:
-            result = json.loads(response.read().decode())[0]
+        for emotion, keywords in self.emotion_keywords.items():
+            score = sum(1 for word in keywords if word in text_lower)
+            scores[emotion] = score
 
-        top = max(result, key=lambda x: x['score'])
+        top_emotion = max(scores, key=scores.get)
+        top_score = scores[top_emotion]
+
+        if top_score == 0:
+            return {"emotion": "Neutral", "confidence": 95.0, "original_label": "neutral"}
+
+        total = sum(scores.values())
+        confidence = round((top_score / total) * 100, 2)
+
         return {
-            "emotion": self.emotion_map.get(top['label'], top['label']),
-            "confidence": round(top['score'] * 100, 2),
-            "original_label": top['label']
+            "emotion": top_emotion,
+            "confidence": confidence,
+            "original_label": top_emotion.lower()
         }
