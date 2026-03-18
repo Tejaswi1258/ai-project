@@ -10,6 +10,7 @@ class EmotionAnalyzer:
             'fear': 'Anxious',
             'surprise': 'Excited',
             'disgust': 'Disgusted',
+            'negative': 'Negative thoughts',
             'neutral': 'Neutral'
         }
     

@@ -1,6 +1,6 @@
 const emotionEmojis = {
     Happy: '😊', Excited: '🤩', Sad: '😢', Angry: '😠',
-    Anxious: '😰', Confused: '😕', Lonely: '😔', Hopeless: '💙', Neutral: '😐'
+    Anxious: '😰', Confused: '😕', Lonely: '😔', Hopeless: '💙', Violent: '🚨', Neutral: '😐'
 };
 
 let history = [];

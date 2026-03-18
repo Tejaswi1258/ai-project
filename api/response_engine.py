@@ -67,6 +67,14 @@ class ResponseEngine:
                 'high':   ["Please hear me — what you're feeling is real, but you matter more than you know right now.",
                            "I'm really concerned about you. Please talk to someone you trust or call a helpline. You deserve support. 💙"]
             },
+            'Violent': {
+                'low':    ["I can hear you're really angry right now — but hurting someone is never the right path. Let's talk about what's really going on.",
+                           "That's a really dark thought. I'm not judging you, but acting on it would only make things worse. What happened?"],
+                'medium': ["I hear how much pain and rage you're carrying — but harming someone else won't fix what's hurting you. Please step back.",
+                           "Those thoughts are serious and I'm concerned. Hurting others is wrong and will destroy your life too. Talk to me instead."],
+                'high':   ["Please stop and breathe. Acting on this will ruin your life and hurt everyone around you — including yourself. This is not the answer.",
+                           "I'm really worried about you right now. Harming others is never okay, no matter how angry you feel. Please reach out to someone immediately."]
+            },
             'Neutral': {
                 'low':    ["Hey! How are you doing today?",
                            "What's on your mind?"],
@@ -113,6 +121,13 @@ class ResponseEngine:
                 "Call or text a mental health helpline — they're there for exactly this.",
                 "Focus on just the next hour, not the big picture. One hour at a time.",
                 "You've made it through hard times before. This feeling is not permanent."
+            ],
+            'Violent': [
+                "Stop and walk away from the situation immediately — distance helps cool anger.",
+                "Call a helpline or talk to a trusted person before doing anything you'll regret.",
+                "Take 10 deep slow breaths right now — your brain needs oxygen to think clearly.",
+                "Write down exactly what made you feel this way — get it out on paper, not on a person.",
+                "Ask yourself: is this worth ruining your life over? The answer is always no."
             ]
         }
 
@@ -129,6 +144,7 @@ class ResponseEngine:
             'Confused': ["What part is the most unclear to you?", "What do you already know about the situation?", "What outcome are you hoping for?"],
             'Lonely':   ["When did you start feeling this way?", "Is there someone specific you're missing?", "What kind of connection are you craving right now?"],
             'Hopeless': ["What's made you feel this way?", "Is there one small thing that used to bring you comfort?", "Have you been able to talk to anyone about this?"],
+            'Violent':  ["What happened that made you feel this way?", "Has someone hurt you or treated you unfairly?", "Is there someone safe you can talk to right now?"],
             'Happy':    ["What's been the highlight of your day?", "What made this happen?", "How long have you been feeling this good?"],
             'Excited':  ["What's the big thing you're looking forward to?", "How long have you been waiting for this?", "Who are you sharing this excitement with?"],
             'Neutral':  ["Anything on your mind today?", "How has your day been going?", "Anything you want to talk through?"]
@@ -144,7 +160,7 @@ class ResponseEngine:
         response = random.choice(intensity_responses)
 
         suggestion = None
-        if emotion in self.suggestions and intensity in ['medium', 'high']:
+        if emotion in self.suggestions and (intensity in ['medium', 'high'] or emotion == 'Violent'):
             suggestion = random.choice(self.suggestions[emotion])
 
         followup = None

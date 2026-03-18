@@ -317,6 +317,7 @@ textarea::placeholder { color: #44446a; }
 .badge-Confused { background: #164e6322; color: #67e8f9; border: 1px solid #67e8f944; }
 .badge-Lonely   { background: #1e293b22; color: #94a3b8; border: 1px solid #94a3b844; }
 .badge-Hopeless { background: #1c100022; color: #fb923c; border: 1px solid #fb923c44; }
+.badge-Violent  { background: #7f1d1d44; color: #ff4444; border: 1px solid #ff444466; }
 .badge-Neutral  { background: #1f2937;   color: #9ca3af; border: 1px solid #9ca3af44; }
 
 @media (max-width: 640px) {

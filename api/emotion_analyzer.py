@@ -26,6 +26,18 @@ class EmotionAnalyzer:
             "i want to hurt myself", "hurt myself", "self harm", "want to end it"
         ]
 
+        self.violence_phrases = [
+            "want to kill", "want to hurt", "going to kill", "gonna kill", "i will kill",
+            "i want to kill", "kill him", "kill her", "kill them", "kill everyone",
+            "kill my", "murder", "want to murder", "going to murder", "gonna murder",
+            "i will murder", "beat him up", "beat her up", "beat them up", "destroy him",
+            "destroy her", "destroy them", "make them suffer", "make him suffer",
+            "make her suffer", "hurt him", "hurt her", "hurt them", "attack him",
+            "attack her", "attack them", "stab", "shoot him", "shoot her", "shoot them",
+            "i hate him so much i want to", "i hate her so much i want to",
+            "want to harm", "going to harm", "planning to hurt", "planning to kill"
+        ]
+
         self.implicit_sad = [
             "i'm not ok", "im not ok", "i am not ok", "not okay", "i'm not okay",
             "not doing well", "not doing good", "not feeling well", "not feeling good",
@@ -140,6 +152,15 @@ class EmotionAnalyzer:
         text_lower = re.sub(r"['\u2019]", "'", text_lower)
         words = re.findall(r"\b\w+\b", text_lower)
         scores = {emotion: 0.0 for emotion in self.emotion_keywords}
+
+        # violence / harm to others detection - highest priority
+        for phrase in self.violence_phrases:
+            if phrase in text_lower:
+                return {
+                    "emotion": "Violent", "intensity": "high",
+                    "confidence": 99.0, "sarcasm": False,
+                    "alert": "⚠️ Harming others is never the answer. Please step away and talk to someone you trust or call a helpline immediately."
+                }
 
         # crisis detection
         for phrase in self.crisis_phrases:
